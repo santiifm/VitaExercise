@@ -3,7 +3,170 @@ openapi: 3.0.1
 info:
   title: API V1
   version: v1
-paths: {}
+paths:
+  "/api/v1/clients/{client_id}/transactions":
+    get:
+      summary: Get a client's transactions
+      parameters:
+      - name: client_id
+        in: path
+        description: client_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                  - id: 1
+                    source_currency: USD
+                    target_currency: BTC
+                    source_amount: 123.12345
+                    target_amount: 567.64334123
+                    client_id: 1
+                    exchange_rate: 123.0
+                    created_at: '2024-06-23T21:50:51.991Z'
+                    updated_at: '2024-06-23T21:50:51.991Z'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: Client doesn't exist or invalid client.
+  "/api/v1/clients":
+    post:
+      summary: Create a client
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    message: Successfully created the client.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error:
+                    - Username can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+              - username
+        description: Client object containing username
+  "/api/v1/exchange_rates":
+    get:
+      summary: Retrieve exchange rate
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    USD: 64383.6143
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: CoinDesk API is currently unavailable
+  "/api/v1/transactions":
+    post:
+      summary: Create a Transaction
+      tags:
+      - Transactions
+      parameters: []
+      responses:
+        '201':
+          description: Transaction Created
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 1
+                    source_currency: USD
+                    target_currency: BTC
+                    source_amount: 123.12345
+                    target_amount: 567.64334123
+                    client_id: 1
+                    exchange_rate: 123.0
+                    created_at: '2024-06-23T21:50:51.991Z'
+                    updated_at: '2024-06-23T21:50:51.991Z'
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_currency:
+                  type: string
+                target_currency:
+                  type: string
+                source_amount:
+                  type: number
+                client_id:
+                  type: integer
+              required:
+              - source_currency
+              - target_currency
+              - source_amount
+              - client_id
+  "/api/v1/transactions/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get a specific transaction
+      tags:
+      - Transactions
+      responses:
+        '200':
+          description: transaction found
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 1
+                    source_currency: USD
+                    target_currency: BTC
+                    source_amount: 123.12345
+                    target_amount: 567.64334123
+                    client_id: 1
+                    exchange_rate: 123.0
+                    created_at: '2024-06-23T21:50:51.991Z'
+                    updated_at: '2024-06-23T21:50:51.991Z'
+        '404':
+          description: transaction not found
 servers:
 - url: https://vitaexercise.onrender.com
   variables:

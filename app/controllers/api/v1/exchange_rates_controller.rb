@@ -4,7 +4,7 @@ module Api
   module V1
     class ExchangeRatesController < ApplicationController
       def index
-        exchange_rate = CoinDesk::GetExchangeRate.exec
+        exchange_rate = CoinDesk::GetExchangeRate.exec.select { |s| s == 'USD' }
         if !exchange_rate.key?(:error)
           render json: exchange_rate, status: :ok
         else
