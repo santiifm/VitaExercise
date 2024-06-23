@@ -16,7 +16,7 @@ module CoinDesk
 
       if response.is_a? Net::HTTPSuccess
         # Returns bpi which are the exchange rates
-        JSON.parse(response.body)['bpi']
+        JSON.parse(response.body)['bpi'].transform_values { |v| v["rate_float"] }
       else
         { error: "#{response.code} #{response.read_body}" }
       end
