@@ -15,7 +15,7 @@ module Api
         if source_balance&.enough_funds(source_amount)
           transaction = Transaction.new(transaction_params.merge(
                                           target_amount:,
-                                          exchange_rate: @exchange_rate,
+                                          exchange_rate: @selected_rate,
                                           client_id: params[:client_id]
                                         ))
         else
@@ -59,8 +59,10 @@ module Api
 
       def calculate_total
         if transaction_params[:source_currency] == 'BTC'
-          @exchange_rate[params[:source_currency]] * params[:source_amount]
+          @selected_rate = @exchange_rate[transaction_params[:target_currency]]
+          @exchange_rate[transaction_params[:target_currency]] * transaction_params[:source_amount]
         else
+          @selected_rate = @exchange_rate[transaction_params[:source_currency]]
           @exchange_rate[transaction_params[:source_currency]] / transaction_params[:source_amount]
         end
       end
