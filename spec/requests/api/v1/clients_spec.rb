@@ -26,14 +26,17 @@ RSpec.describe 'api/v1/clients', type: :request do
             source_amount: 123.12345,
             target_amount: 567.64334123,
             client_id: 1,
-            exchange_rate: 123.00
+            exchange_rate: 123.00,
+            created_at: '2024-06-23T21:50:51.991Z',
+            updated_at: '2024-06-23T21:50:51.991Z'
           }
         ]
 
         run_test! do
           expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)).to be_an_instance_of(Array)
-          expect(JSON.parse(response.body).first['id']).to eq(transaction.id)
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response).to be_an_instance_of(Array)
+          expect(parsed_response.first['id']).to eq(transaction.id)
         end
       end
 
