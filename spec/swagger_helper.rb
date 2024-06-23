@@ -24,18 +24,18 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
-          url: 'http://localhost:3000',
-          variables: {
-            defaultHost: {
-              default: 'localhost:3000'
-            }
-          }
-        },
-        {
           url: 'https://vitaexercise.onrender.com',
           variables: {
             defaultHost: {
               default: 'vitaexercise.onrender.com'
+            }
+          }
+        },
+        {
+          url: 'http://localhost:3000',
+          variables: {
+            defaultHost: {
+              default: 'localhost:3000'
             }
           }
         }

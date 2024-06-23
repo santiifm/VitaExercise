@@ -108,6 +108,10 @@ paths:
                   value:
                     error: CoinDesk API is currently unavailable
 servers:
+- url: https://vitaexercise.onrender.com
+  variables:
+    defaultHost:
+      default: vitaexercise.onrender.com
 - url: http://localhost:3000
   variables:
     defaultHost:
