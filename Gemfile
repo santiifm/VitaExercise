@@ -46,12 +46,12 @@ gem "bootsnap", require: false
 gem "rubocop"
 # This is added to fix deploys as a dependency is missing on ruby 3.3.3
 gem "net-pop", github: "ruby/net-pop"
+gem "rspec-rails"
+gem "rswag"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
-  gem "rspec-rails"
-  gem "rswag"
 end
 
 group :development do
