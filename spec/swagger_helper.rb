@@ -30,6 +30,14 @@ RSpec.configure do |config|
               default: 'localhost:3000'
             }
           }
+        },
+        {
+          url: 'https://vitaexercise.onrender.com',
+          variables: {
+            defaultHost: {
+              default: 'vitaexercise.onrender.com'
+            }
+          }
         }
       ]
     }
