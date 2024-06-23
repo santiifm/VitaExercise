@@ -43,8 +43,9 @@ gem "bootsnap", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
-
 gem "rubocop"
+# This is added to fix deploys as a dependency is missing on ruby 3.3.3
+gem "net-pop", github: "ruby/net-pop"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
