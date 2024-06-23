@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class ExchangeRateController < ApplicationController
+    class ExchangeRatesController < ApplicationController
       def index
         exchange_rate = CoinDesk::GetExchangeRate.exec
         if !exchange_rate.key?(:error)

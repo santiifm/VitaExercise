@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         get :transactions
       end
       resources :transactions, only: %i[create show]
+      resources :exchange_rates, only: %i[index]
     end
   end
 end
