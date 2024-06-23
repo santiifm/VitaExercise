@@ -80,8 +80,10 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-# production:
-#   <<: *default
-#   database: vita_exercise_production
-#   username: vita_exercise
-#   password: <%= ENV["VITA_EXERCISE_DATABASE_PASSWORD"] %>
+production:
+  <<: *default
+  database: vita_exercise_production
+  username: <%= Rails.application.credentials.production[:db][:username] %>
+  password: <%= Rails.application.credentials.production[:db][:password] %>
+  host: <%= Rails.application.credentials.production[:db][:host] %>
+  port: <%= Rails.application.credentials.production[:db][:port] %>
