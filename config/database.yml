@@ -82,8 +82,8 @@ test:
 #
 production:
   <<: *default
+  url: <%= Rails.application.credentials.production[:db][:url] %>
   database: vita_exercise_production
   username: <%= Rails.application.credentials.production[:db][:username] %>
   password: <%= Rails.application.credentials.production[:db][:password] %>
-  host: <%= Rails.application.credentials.production[:db][:host] %>
   port: <%= Rails.application.credentials.production[:db][:port] %>
