@@ -2,7 +2,7 @@ require 'swagger_helper'
 
 RSpec.describe 'api/v1/clients', type: :request do
   path '/api/v1/clients/{client_id}/transactions' do
-    get('transactions client') do
+    get("Get a client's transactions") do
       consumes 'application/json'
       produces 'application/json'
       parameter name: 'client_id', in: :path, type: :string, description: 'client_id'
@@ -53,7 +53,7 @@ RSpec.describe 'api/v1/clients', type: :request do
   end
 
   path '/api/v1/clients' do
-    post('create client') do
+    post('Create a client') do
       consumes 'application/json'
       produces 'application/json'
       parameter name: :client, in: :body, schema: {
