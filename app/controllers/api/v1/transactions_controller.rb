@@ -61,7 +61,7 @@ module Api
           @exchange_rate * transaction_params[:source_amount] unless @exchange_rate.blank?
         else
           set_exchange_rate(transaction_params[:source_currency])
-          @exchange_rate / transaction_params[:source_amount] unless @exchange_rate.blank?
+          transaction_params[:source_amount] / @exchange_rate  unless @exchange_rate.blank?
         end
       end
 
