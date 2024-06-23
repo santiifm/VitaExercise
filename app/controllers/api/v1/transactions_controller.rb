@@ -3,23 +3,20 @@
 module Api
   module V1
     class TransactionsController < ApplicationController
-      before_action :set_exchange_rate, only: :create
-
       def create
         source_amount = transaction_params[:source_amount].to_f
-        target_amount = calculate_total
-
         source_balance = get_balance(params[:client_id], transaction_params[:source_currency])
         target_balance = get_balance(params[:client_id], transaction_params[:target_currency])
 
-        if source_balance&.enough_funds(source_amount)
+        if source_balance&.enough_funds(source_amount) && (target_amount = calculate_total).present?
+          # Here the target amount is calculated later in order to avoid unnecesarily querying the CoinDesk API
           transaction = Transaction.new(transaction_params.merge(
                                           target_amount:,
-                                          exchange_rate: @selected_rate,
+                                          exchange_rate: @exchange_rate,
                                           client_id: params[:client_id]
                                         ))
         else
-          return render json: { error: 'Not enough funds or invalid client balance.' }, status: :unprocessable_entity
+          return render json: { error: 'Not enough funds or invalid currencies.' }, status: :unprocessable_entity
         end
 
         if transaction.save
@@ -32,7 +29,7 @@ module Api
       end
 
       def show
-        transaction = Transaction.find_by(id: params[:transaction_id])
+        transaction = Transaction.find_by(id: params[:id])
 
         if transaction
           render json: format_tx(transaction), status: :ok
@@ -57,33 +54,35 @@ module Api
         target_balance.update!(amount: target_balance.amount + target_amount)
       end
 
+      # Returns total of transaction and selects the exchange rate
       def calculate_total
         if transaction_params[:source_currency] == 'BTC'
-          @selected_rate = @exchange_rate[transaction_params[:target_currency]]
-          @exchange_rate[transaction_params[:target_currency]] * transaction_params[:source_amount]
+          set_exchange_rate(transaction_params[:target_currency])
+          @exchange_rate * transaction_params[:source_amount] unless @exchange_rate.blank?
         else
-          @selected_rate = @exchange_rate[transaction_params[:source_currency]]
-          @exchange_rate[transaction_params[:source_currency]] / transaction_params[:source_amount]
+          set_exchange_rate(transaction_params[:source_currency])
+          @exchange_rate / transaction_params[:source_amount] unless @exchange_rate.blank?
         end
       end
 
+      # Formats currency to have the international format
       def format_tx(transaction)
         transaction.target_amount = format_amount(transaction.target_currency, transaction.target_amount)
         transaction.source_amount = format_amount(transaction.source_currency, transaction.source_amount)
         transaction
       end
 
-      def format_currency(type, amount)
+      def format_amount(type, amount)
         case type
         when 'USD'
-          number_to_rounded(amount, precision: 2, round_mode: :down)
+          amount.round(2, :down)
         when 'BTC'
-          number_to_rounded(amount, precision: 8, round_mode: :down)
+          amount.round(8, :down)
         end
       end
 
-      def set_exchange_rate
-        @exchange_rate = CoinDesk::GetExchangeRate.exec
+      def set_exchange_rate(currency)
+        @exchange_rate = CoinDesk::GetExchangeRate.exec[currency]
       end
     end
   end
