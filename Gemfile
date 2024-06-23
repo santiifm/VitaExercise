@@ -48,6 +48,8 @@ gem "rubocop"
 gem "net-pop", github: "ruby/net-pop"
 gem "rspec-rails"
 gem "rswag"
+# This gem should be in the test group but adding it as a require in the spec helper broke my deploy
+gem "database_cleaner"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -67,7 +69,6 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "database_cleaner"
   gem "capybara"
   gem "selenium-webdriver"
 end
